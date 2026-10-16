@@ -1,0 +1,54 @@
+# 김웅 AI 쇼츠 드라마 — 첫 테스트 샷 설정
+# 상태: 클라우드에서는 실행 불가(GPU 없음). 맥(M5 Pro 48GB)에서 아직 실행하지 않음.
+shot_id: test_shot_01
+purpose: 승인된 김웅 이미지 1장 → 저해상도 2초 image-to-video 테스트 1개 (드라마 본편 아님)
+
+tool:
+  name: LTX Desktop
+  version: "1.3.0"            # 2026-10-09 릴리스, macOS arm64 dmg (공식 GitHub 릴리스로 확인)
+  model: LTX 2.5 Fast          # 맥 로컬 생성 기본 모델 (README 기준)
+  text_encoder: local          # 클라우드 텍스트 인코딩(API 키 필요)은 사용하지 않음
+  mode: image_to_video
+
+input:
+  image: assets/ref/kimung_ref_approved.png     # 원본 378x354, 거의 정방형
+  image_alt_9x16: assets/ref/kimung_ref_9x16_test.png   # scripts/prep_reference.py 가 만든 세로형 입력(선택)
+
+generation:
+  resolution: "앱에서 제공하는 가장 낮은 프리셋 (540p 이하). 720p 이상은 앱이 '맥에서 느림' 경고를 띄움"
+  aspect_ratio: "9:16 선택 가능하면 9:16, 아니면 입력 이미지 비율 유지"
+  duration_s: 2                # docs/mps-attention-memory-leak.md: 48GB 맥은 2초(49프레임) 이내 권장
+  fps: 24
+  seed: 20261016
+  steps: "앱 기본값 유지"
+
+prompt_en: >
+  A Korean teenage boy with a buzz cut, wearing a black high-collar school uniform,
+  stands outdoors in front of a school building. He stares straight at the camera
+  with an intense, tense expression. Subtle motion only: he breathes slowly, his jaw
+  tightens, his eyes narrow slightly, a faint breeze moves the air. Blurred students
+  walk past in the background. Slow, almost imperceptible camera push-in.
+  Natural overcast daylight, muted film color, cinematic, realistic skin texture.
+
+prompt_ko: >
+  삭발에 가까운 짧은 머리, 검은 교복(차이나 카라)을 입은 한국 남고생이 학교 건물 앞에 서 있다.
+  카메라를 정면으로 노려보는 긴장된 표정. 움직임은 최소한으로: 천천히 숨 쉬고, 턱에 힘이 들어가고,
+  눈이 살짝 가늘어지고, 약한 바람. 뒤로 흐릿한 학생들이 지나간다. 아주 느린 카메라 푸시인.
+  흐린 자연광, 차분한 필름 톤, 시네마틱, 사실적인 피부 질감.
+
+negative_prompt: >
+  cartoon, anime, 3d render, extra fingers, deformed face, text, watermark,
+  fast motion, camera shake, flicker, blurry face, multiple heads
+
+output:
+  raw_clip: outputs/test_shot_01_raw.mp4        # LTX Desktop 결과를 이 이름으로 저장
+  shorts_test: outputs/test_shot_01_shorts_480p.mp4
+  post_command: >
+    python scripts/make_shorts.py compose --input outputs/test_shot_01_raw.mp4
+    --output outputs/test_shot_01_shorts_480p.mp4 --size test --caption "김웅 · 테스트 샷 01"
+
+record_after_run:              # 맥에서 실행 후 docs/MAC_TEST_LOG.md 에 기록
+  - 생성 소요 시간(초)
+  - 활성 상태 보기(Activity Monitor) 메모리 최고치(GB)
+  - 결과 해상도/프레임 수 (scripts/make_shorts.py info 로 확인)
+  - 얼굴 일관성 주관 평가 (1~5)
