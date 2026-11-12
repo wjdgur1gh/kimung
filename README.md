@@ -12,6 +12,7 @@
 | FFmpeg 편집 파이프라인 | ✅ 클라우드에서 검증 (모델 추론 없음) | `outputs/` 의 `cloud_*` 파일, `docs/ENV_REPORT_CLOUD.md` |
 | LTX Desktop 맥 지원 여부 | 📄 공식 문서로 확인 (1.3.0, Apple Silicon + RAM 32 GiB↑) | `docs/MAC_SETUP.md` |
 | 맥 설치·첫 테스트 | ⏳ 아직 실행하지 않음 | `docs/MAC_SETUP.md`, `docs/MAC_TEST_LOG.md` |
+| 힉스필드 얼굴 팩 (45도 8장 + 표정 10장) | ⏳ 프롬프트만 준비. 무제한은 Claude 채팅에서만 가능해 Claude Code 에서는 생성하지 않음 | `docs/higgsfield/KIMUNG_FACE_PACK.md` |
 
 범례: ✅ 이 세션의 클라우드에서 실제 실행해 확인 · 📄 공식 문서(GitHub README/릴리스/docs)로 확인 · ⏳ 맥에서 아직 미실행
 
